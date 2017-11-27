@@ -9,7 +9,7 @@ const { dbConnect } = require('./db-mongoose');
 
 const app = express();
 
-const { router: userRouter} = require('./users');
+const { router: userRouter } = require('./users');
 
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {

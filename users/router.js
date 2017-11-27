@@ -2,6 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
+var qs = require('qs');
+var assert = require('assert');
+
 const { User } = require('./models');
 
 const bodyParser = require('body-parser');
@@ -119,8 +122,11 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  console.log(User.find());
+  // return res.status(200).json({message:'hello'});
+  console.log('testing');
+  console.log('user', User);
   return User.find()
+  
     .then(users => {
       let usersJSON = users.map(user=>user.apiRepr());
       return res.status(200).json(usersJSON);

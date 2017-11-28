@@ -10,6 +10,9 @@ const { User } = require('./models');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 router.use(jsonParser);
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 function validateUserFields(user) {
   // split this into 3 PURE helper functions
@@ -133,6 +136,17 @@ router.get('/', (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
+router.delete('/:id', jwtAuth, (req, res) => {
+  User
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => {
+      return res.status(500).json({ message: 'something went wrong' });
     });
 });
 

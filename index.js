@@ -5,12 +5,15 @@ const morgan = require('morgan');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
+const passport = require('passport');
 // const {dbConnect} = require('./db-knex');
 
 const app = express();
 
 const { router: userRouter } = require('./users');
-
+const { router: authRouter, basicStrategy, jwtStrategy } = require('./auth');
+passport.use(basicStrategy);
+//passport.use(jwtStrategy);
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
@@ -24,6 +27,7 @@ app.use(
 );
 
 app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 
 function runServer(port = PORT) {
   const server = app

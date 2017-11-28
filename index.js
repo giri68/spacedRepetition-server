@@ -11,10 +11,10 @@ const passport = require('passport');
 const app = express();
 
 const { router: userRouter } = require('./users');
+const { router: questionRouter } = require('./questions');
 const { router: authRouter, basicStrategy, jwtStrategy } = require('./auth');
 passport.use(basicStrategy);
-console.log(jwtStrategy);
-console.log('basicStrategy',basicStrategy);
+
 passport.use(jwtStrategy);
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
@@ -30,7 +30,11 @@ app.use(
 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/questions', questionRouter);
 
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
+});
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {

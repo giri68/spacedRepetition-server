@@ -20,4 +20,28 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/', jsonParser, (req, res) => {
+  const requiredFs = ['question', 'answer'];
+  const missingF = requiredFs.find( field => !(field in req.body));
+  if (missingF) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'validationError',
+      message: 'Missing field',
+      location: missingF
+    });
+  }
+  
+  let {question, answer} = req.body;
+  return   Question.create({question, answer})
+    .then(patron => res.status(201).json(patron.apiRepr())
+    )
+    .catch( err => {
+      if (err.reason === 'validationError') {
+        return res.status(err.code).json(err);
+      }
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
 module.exports = { router };

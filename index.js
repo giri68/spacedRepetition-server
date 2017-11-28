@@ -13,7 +13,9 @@ const app = express();
 const { router: userRouter } = require('./users');
 const { router: authRouter, basicStrategy, jwtStrategy } = require('./auth');
 passport.use(basicStrategy);
-//passport.use(jwtStrategy);
+console.log(jwtStrategy);
+console.log('basicStrategy',basicStrategy);
+passport.use(jwtStrategy);
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'

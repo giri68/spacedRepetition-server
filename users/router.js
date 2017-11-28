@@ -140,6 +140,7 @@ router.get('/', (req, res) => {
 });
 
 router.delete('/:id', jwtAuth, (req, res) => {
+  console.log('req', req.params.id);
   User
     .findByIdAndRemove(req.params.id)
     .then(() => {

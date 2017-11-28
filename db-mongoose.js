@@ -4,7 +4,7 @@ mongoose.Promise = global.Promise;
 
 const { DATABASE_URL } = require('./config');
 
-console.log('databaseurl', DATABASE_URL);
+
 
 function dbConnect(url = DATABASE_URL) {
   return mongoose.connect(url, { useMongoClient: true }).catch(err => {

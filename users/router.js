@@ -6,6 +6,7 @@ var qs = require('qs');
 
 
 const { User } = require('./models');
+const { Question } = require('../questions');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -111,7 +112,11 @@ router.post('/', jsonParser, (req, res) => {
       return User.hashPassword(password);
     })
     .then(hash => {
-      return User.create({ username, password: hash, lastName, firstName });
+      password = hash;
+      return getUserQs();
+    })
+    .then( userQs => {
+      return User.create({ username, password, lastName, firstName, userQs });
     })
     .then(user => {
       return res.status(201).json(user.apiRepr());
@@ -124,10 +129,20 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
+function getUserQs() {
+  return Question.find()
+    .then( questions => {
+      return questions.map ( (item, index) => ({
+        uqId: index,
+        uqNext: (index + 1) === (questions.length) ? 0 : index + 1,
+        uQuestion: item.question,
+        uAnswer: item.answer,
+        uRepF: 1
+      }));
+    });
+}
+
 router.get('/', (req, res) => {
-  // return res.status(200).json({message:'hello'});
-  console.log('testing');
-  console.log('user', User);
   return User.find()
   
     .then(users => {
@@ -140,7 +155,6 @@ router.get('/', (req, res) => {
 });
 
 router.delete('/:id', jwtAuth, (req, res) => {
-  console.log('req', req.params.id);
   User
     .findByIdAndRemove(req.params.id)
     .then(() => {

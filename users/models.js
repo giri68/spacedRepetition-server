@@ -11,15 +11,22 @@ const UserSchema = mongoose.Schema({
   firstName: { type: String, required: true},
   lastName: { type: String, required: true},
   username: {type: String, required: true, unique:true},
-  password: { type: String, required: true}
-  
+  password: { type: String, required: true},
+  userQs: [{
+    uqId: { type: Number },
+    uqNext: { type: Number },
+    uQuestion: { type: String },
+    uAnswer: { type: String },
+    uRepF: { type: Number }
+  }]
 });
 
 UserSchema.methods.apiRepr = function (){
   return {
     firstName: this.firstName,
     lastName: this.lastName ,
-    username: this.username
+    username: this.username,
+    userQs: this.userQs
   };
 };
 

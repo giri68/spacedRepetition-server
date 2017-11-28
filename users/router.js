@@ -154,6 +154,18 @@ router.get('/', (req, res) => {
     });
 });
 
+
+router.get('/userquestion/:userId', (req, res) => {
+  console.log('res', res);
+  return User.findById(req.params.userId)
+    .then(user => {
+      return res.status(200).json(user.userQs[0].uQuestion);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
 router.delete('/:id', jwtAuth, (req, res) => {
   User
     .findByIdAndRemove(req.params.id)

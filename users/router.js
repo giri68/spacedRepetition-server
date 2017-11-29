@@ -168,6 +168,24 @@ router.get('/userquestion/:userId', (req, res) => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
     });
 });
+
+router.put('/userquestion/:userId', (req, res) => {
+  //console.log('res', res);
+  
+  const answerCorrect = req.body.qCorrect;
+  const questionId = req.body._id;
+  console.log(req.body);
+  //return User.findByIdAndUpdate(req.params.userId,
+  // { $set: { answerCorrect }}
+  // .then(user => {
+  return res.status(204).json({message: 'updated'});
+    
+  // .catch(err => {
+  //   console.log(err);
+  //   res.status(500).json({ code: 500, message: 'Internal server error' });
+  // });
+});
+
 router.delete('/:id', jwtAuth, (req, res) => {
   User
     .findByIdAndRemove(req.params.id)

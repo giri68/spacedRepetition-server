@@ -159,7 +159,7 @@ router.get('/userquestion/:userId', (req, res) => {
   console.log('res', res);
   return User.findById(req.params.userId)
     .then(user => {
-      return res.status(200).json(user.userQs[0].uQuestion);
+      return res.status(200).json(user.userQs[0]);
     })
     .catch(err => {
       console.log(err);

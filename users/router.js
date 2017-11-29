@@ -178,7 +178,7 @@ router.put('/userquestion/:userId', (req, res) => {
   //return User.findByIdAndUpdate(req.params.userId,
   // { $set: { answerCorrect }}
   // .then(user => {
-  return res.status(204).json({message: 'updated'});
+  return res.status(201).json({message: 'updated'});
     
   // .catch(err => {
   //   console.log(err);

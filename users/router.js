@@ -171,20 +171,71 @@ router.get('/userquestion/:userId', (req, res) => {
 });
 
 router.put('/userquestion/:userId', (req, res) => {
-  //console.log('res', res);
-  
+
   const answerCorrect = req.body.qCorrect;
-  const questionId = req.body._id;
-  console.log(req.body);
-  //return User.findByIdAndUpdate(req.params.userId,
-  // { $set: { answerCorrect }}
-  // .then(user => {
-  return res.status(201).json({message: 'updated'});
-    
-  // .catch(err => {
-  //   console.log(err);
-  //   res.status(500).json({ code: 500, message: 'Internal server error' });
-  // });
+  let qM;
+  let offset;
+  let qDestLead;
+  let qDestTrail;
+  let tempId;
+  let user = {};
+
+  return User.findById(req.params.userId)
+    .then(_user => {
+      user = _user;
+      qM = user.userQs[user.head].m;
+      
+      if(answerCorrect) {
+        qM *= 2;
+        offset = Math.min( qM, user.userQs.length );
+      }
+      
+      else {
+        qM = 1;
+        offset = qM;
+      }
+
+      user.userQs[user.head].m = qM;
+
+      // find destination id
+      let qDestLead = user.head;
+      let qDestTrail;
+      let lastId = user.head;
+      for( let i = 0; i < (user.userQs.length - 1); i++ ) {
+        if(i < offset) {
+          qDestTrail = qDestLead;
+          qDestLead = user.userQs[qDestLead].uqNext;
+        }
+        lastId = user.userQs[lastId].uqNext;
+      }
+
+      if(!answerCorrect) {
+        qDestTrail = qDestLead;
+      }
+
+      // assign temp
+      tempId = user.userQs[qDestTrail].uqNext;
+
+      // change destTrail's uqNext to outgoing head
+      user.userQs[qDestTrail].uqNext = user.head;
+      // change head
+      user.head = user.userQs[user.head].uqNext;
+      
+      // change old head's uqNext to temp val
+      user.userQs[user.userQs[qDestTrail].uqNext].uqNext = tempId;
+      
+      // make last node's uqNext = new head
+      user.userQs[lastId].uqNext = user.head;
+      console.log(user);
+
+      return User.findOneAndUpdate({_id: req.params.userId}, user, {overwrite: true});
+    })
+    .then( () => {
+      res.status(204).end();
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Internal server error'});
+    });
 });
 
 router.delete('/:id', jwtAuth, (req, res) => {

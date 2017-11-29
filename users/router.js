@@ -156,10 +156,12 @@ router.get('/', (req, res) => {
 
 
 router.get('/userquestion/:userId', (req, res) => {
-  console.log('res', res);
+  //console.log('res', res);
+  const selQ = Math.floor(Math.random()*10);
+  console.log(selQ);
   return User.findById(req.params.userId)
     .then(user => {
-      return res.status(200).json(user.userQs[0]);
+      return res.status(200).json(user.userQs[selQ]);
     })
     .catch(err => {
       console.log(err);

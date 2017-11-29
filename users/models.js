@@ -12,12 +12,13 @@ const UserSchema = mongoose.Schema({
   lastName: { type: String, required: true},
   username: {type: String, required: true, unique:true},
   password: { type: String, required: true},
+  head: {type: Number},
   userQs: [{
     uqId: { type: Number },
     uqNext: { type: Number },
     uQuestion: { type: String },
     uAnswer: { type: String },
-    uRepF: { type: Number }
+    m: { type: Number }
   }]
 });
 

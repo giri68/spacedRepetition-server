@@ -97,7 +97,6 @@ router.post('/', jsonParser, (req, res) => {
 
   console.log('user validated');
   let { username, password, lastName, firstName } = userValid;
-  let head = 0;
   return User.find({ username })
     .count()
     .then(count => {
@@ -117,7 +116,7 @@ router.post('/', jsonParser, (req, res) => {
       return getUserQs();
     })
     .then( userQs => {
-      return User.create({ username, password, lastName, firstName, head, userQs });
+      return User.create({ username, password, lastName, firstName, userQs });
     })
     .then(user => {
       return res.status(201).json(user.apiRepr());
@@ -157,12 +156,9 @@ router.get('/', (req, res) => {
 
 
 router.get('/userquestion/:userId', (req, res) => {
-  //console.log('res', res);
-  const selQ = Math.floor(Math.random()*10);
-  console.log(selQ);
   return User.findById(req.params.userId)
     .then(user => {
-      return res.status(200).json(user.userQs[selQ]);
+      return res.status(200).json(user.userQs[user.head]);
     })
     .catch(err => {
       console.log(err);

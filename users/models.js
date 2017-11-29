@@ -12,7 +12,7 @@ const UserSchema = mongoose.Schema({
   lastName: { type: String, required: true},
   username: {type: String, required: true, unique:true},
   password: { type: String, required: true},
-  head: {type: Number},
+  head: {type: Number, default: 0},
   userQs: [{
     uqId: { type: Number },
     uqNext: { type: Number },

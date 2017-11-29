@@ -97,7 +97,7 @@ router.post('/', jsonParser, (req, res) => {
 
   console.log('user validated');
   let { username, password, lastName, firstName } = userValid;
-
+  let head = 0;
   return User.find({ username })
     .count()
     .then(count => {
@@ -113,10 +113,11 @@ router.post('/', jsonParser, (req, res) => {
     })
     .then(hash => {
       password = hash;
+
       return getUserQs();
     })
     .then( userQs => {
-      return User.create({ username, password, lastName, firstName, userQs });
+      return User.create({ username, password, lastName, firstName, head, userQs });
     })
     .then(user => {
       return res.status(201).json(user.apiRepr());
@@ -137,7 +138,7 @@ function getUserQs() {
         uqNext: (index + 1) === (questions.length) ? 0 : index + 1,
         uQuestion: item.question,
         uAnswer: item.answer,
-        uRepF: 1
+        m: 1
       }));
     });
 }

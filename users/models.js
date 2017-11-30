@@ -4,21 +4,22 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-
-
-
 const UserSchema = mongoose.Schema({
   firstName: { type: String, required: true},
   lastName: { type: String, required: true},
   username: {type: String, required: true, unique:true},
   password: { type: String, required: true},
-  head: {type: Number, default: 0},
+  histAtt: { type: Number, default: 0},
+  histCorr: { type: Number, default: 0},
+  head: { type: Number, default: 0},
   userQs: [{
     uqId: { type: Number },
     uqNext: { type: Number },
     uQuestion: { type: String },
     uAnswer: { type: String },
-    m: { type: Number }
+    m: { type: Number },
+    qhistAtt: { type: Number, default: 0},
+    qhistCorr: { type: Number, default: 0}
   }]
 });
 
@@ -28,6 +29,7 @@ UserSchema.methods.apiRepr = function (){
     firstName: this.firstName,
     lastName: this.lastName ,
     username: this.username,
+    head: this.head,
     userQs: this.userQs
   };
 };

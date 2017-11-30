@@ -144,7 +144,6 @@ function getUserQs() {
 
 router.get('/', (req, res) => {
   return User.find()
-  
     .then(users => {
       let usersJSON = users.map(user=>user.apiRepr());
       return res.status(200).json(usersJSON);
@@ -154,6 +153,15 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+  return User.findById(req.params.id)
+    .then(user => {
+      return res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
 
 router.get('/userquestion/:userId', (req, res) => {
   return User.findById(req.params.userId)
@@ -166,9 +174,20 @@ router.get('/userquestion/:userId', (req, res) => {
     });
 });
 
+router.get('/userstats/:userId', (req, res) => {
+  return User.findById(req.params.userId)
+    .then(user => {
+      return res.status(200).json({hAtt: user.histAtt, hCorr: user.histCorr});
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
 router.put('/userquestion/:userId', (req, res) => {
 
-  const answerCorrect = req.body.qCorrect;
+  const ansCorr = req.body.qCorrect;
   let qM;
   let offset;
   let qDestLead;
@@ -180,15 +199,18 @@ router.put('/userquestion/:userId', (req, res) => {
     .then(_user => {
       user = _user;
       qM = user.userQs[user.head].m;
-      
-      if(answerCorrect) {
+      user.userQs[user.head].qhistAtt = user.userQs[user.head].qhistAtt + 1;
+      user.histAtt = user.histAtt + 1;
+
+      if(ansCorr) {
         qM *= 2;
-        offset = Math.min( qM, user.userQs.length );
+        offset = Math.min( qM, (user.userQs.length - 1) ) + 1;
+        user.userQs[user.head].qhistCorr = user.userQs[user.head].qhistCorr + 1;
+        user.histCorr = user.histCorr + 1;
       }
-      
       else {
         qM = 1;
-        offset = qM;
+        offset = qM + 1;
       }
 
       user.userQs[user.head].m = qM;
@@ -196,17 +218,10 @@ router.put('/userquestion/:userId', (req, res) => {
       // find destination id
       let qDestLead = user.head;
       let qDestTrail;
-      let lastId = user.head;
-      for( let i = 0; i < (user.userQs.length - 1); i++ ) {
-        if(i < offset) {
-          qDestTrail = qDestLead;
-          qDestLead = user.userQs[qDestLead].uqNext;
-        }
-        lastId = user.userQs[lastId].uqNext;
-      }
 
-      if(!answerCorrect) {
+      for( let i = 0; i < offset; i++ ) {
         qDestTrail = qDestLead;
+        qDestLead = user.userQs[qDestLead].uqNext;
       }
 
       // assign temp
@@ -214,15 +229,12 @@ router.put('/userquestion/:userId', (req, res) => {
 
       // change destTrail's uqNext to outgoing head
       user.userQs[qDestTrail].uqNext = user.head;
+
       // change head
       user.head = user.userQs[user.head].uqNext;
       
       // change old head's uqNext to temp val
       user.userQs[user.userQs[qDestTrail].uqNext].uqNext = tempId;
-      
-      // make last node's uqNext = new head
-      user.userQs[lastId].uqNext = user.head;
-      console.log(user);
 
       return User.findOneAndUpdate({_id: req.params.userId}, user, {overwrite: true});
     })

@@ -23,7 +23,7 @@ How it Works
       <p>When a user logs in, he provides with police code and he can provide his answer in input box. .</p>
     </td>
     <td>
-      <img src="/img/buzz-kill-addpatron.png" max-height="240px" witdh="auto">
+      <img src="/img/answer.png" max-height="240px" witdh="auto">
     </td>
   </tr>
   <tr>
@@ -31,7 +31,7 @@ How it Works
       <p>If the answer is right, it shows correct in green background. But if it is wrong, it shows incorrect in red background and provides correct answer.</p>
     </td>
     <td>
-      <img src="/img/buzz-kill-patrondet.png" max-height="240px" witdh="auto">
+      <img src="/img/answerresponse.png" max-height="240px" witdh="auto">
     </td>
   </tr>
   <tr>
@@ -39,7 +39,7 @@ How it Works
       <p>The app also tracks user's over all history progress and particular session's progress.</p>
     </td>
     <td>
-      <img src="/img/buzz-kill-patronemergency.png" max-height="240px" witdh="auto">
+      <img src="/img/feedback.png" max-height="240px" witdh="auto">
     </td>
   </tr>
 </table>

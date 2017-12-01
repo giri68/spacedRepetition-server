@@ -1,4 +1,4 @@
-<p align="center"><img src="/images/logo.jpg" height="120" /></p>
+<p align="center"><img src="/images/logo.png" height="120" /></p>
 <h1>BACK-END</h1>
 <p><em>This document provides general information on the Polica code app and details on the api.  For more information about the Police code client, please see <a href="https://github.com/brianjb-lfl/spacedRepetition-client/blob/master/README.md">Police code front end</a>.</em></p>
 

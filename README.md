@@ -1,45 +1,211 @@
-# Thinkful Backend Template
+<p align="center"><img src="/img/logo.jpg" height="120" /></p>
+<h1>BACK-END</h1>
+<p><em>This document provides general information on the Polica code app and details on the api.  For more information about the Police code client, please see <a href="https://github.com/brianjb-lfl/spacedRepetition-client/blob/master/README.md">Police code front end</a>.</em></p>
 
-A template for developing and deploying Node.js apps.
 
-## Getting started
+Why Police code
+---------------
+Spaced repetition is a learning technique that incorporates increasing intervals of time between subsequent review of previously learned material. Police code app is using algorithm following the space repetition approach. It will be a great tools to learn about police code for professionals and hubbyist.
 
-### Setting up a project
+How it Works
+------------
+<table layout="fixed">
+  <tr>
+    <td width="55%">
+      <p>Police code's main screen displays police 10-code.  It is provided with question.</p>
+    </td>
+    <td width = "40%">
+      <img src="../images/question.png" max-height="240px" width="auto">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>When a user logs in, he provides with police code and he can provide his answer in input box. .</p>
+    </td>
+    <td>
+      <img src="/img/buzz-kill-addpatron.png" max-height="240px" witdh="auto">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>If the answer is right, it shows correct in green background. But if it is wrong, it shows incorrect in red background and provides correct answer.</p>
+    </td>
+    <td>
+      <img src="/img/buzz-kill-patrondet.png" max-height="240px" witdh="auto">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>The app also tracks user's over all history progress and particular session's progress.</p>
+    </td>
+    <td>
+      <img src="/img/buzz-kill-patronemergency.png" max-height="240px" witdh="auto">
+    </td>
+  </tr>
+</table>
 
-* Move into your projects directory: `cd ~/YOUR_PROJECTS_DIRECTORY`
-* Clone this repository: `git clone https://github.com/Thinkful-Ed/backend-template YOUR_PROJECT_NAME`
-* Move into the project directory: `cd YOUR_PROJECT_NAME`
-* Install the dependencies: `npm install`
-* Create a new repo on GitHub: https://github.com/new
-    * Make sure the "Initialize this repository with a README" option is left unchecked
-* Update the remote to point to your GitHub repository: `git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME`
+Where to find Police code
+------
 
-### Working on the project
+|          **desc**        |                   **location**                                          |
+|--------------------------|-------------------------------------------------------------------------|
+|live client               |   http://lucid-davinci-0607dd.netlify.com/                               |
+|client code               |   https://github.com/brianjb-lfl/spacedRepetition-client                     |
+|deployed api              |   https://space-repetetion.herokuapp.com/                           |
+|api code                  |   https://github.com/giri68/spacedRepetition-server                        | 
 
-* Move into the project directory: `cd ~/YOUR_PROJECTS_DIRECTORY/YOUR_PROJECT_NAME`
-* Run the development task: `npm start`
-    * Starts a server running at http://localhost:8080
-    * Automatically restarts when any of your files change
+Local API Use
+------
+1.  clone this repository<br>
+``` git clone https://github.com/giri68/spacedRepetition-server.git```<br>
 
-## Databases
+2.  move to the repository's local directory<br>
+``` cd spacedRepetition-server```<br>
 
-By default, the template is configured to connect to a MongoDB database using Mongoose.  It can be changed to connect to a PostgreSQL database using Knex by replacing any imports of `db-mongoose.js` with imports of `db-knex.js`, and uncommenting the Postgres `DATABASE_URL` lines in `config.js`.
+3.  install dependencies<br>
+``` npm install```<br>
 
-## Deployment
+note: use of this api requires access to a mongo database<br>
 
-Requires the [Heroku CLI client](https://devcenter.heroku.com/articles/heroku-command-line).
+4.  if using a remote database instance (e.g. mLab)<br>
+    create a .env file in the repository root with the following line:<br>
+``` DATABASE_URL=(database connection string/url)```<br>
 
-### Setting up the project on Heroku
+4.  or, you can use a local mongo database<br>
+    when using a local database, omit the DATABASE_URL .env setting<br>
+    in the config.js file, modify the second part of the following line accordingly<br>
+``` process.env.DATABASE_URL || 'mongodb://localhost/thinkful-backend'```<br>
 
-* Move into the project directory: `cd ~/YOUR_PROJECTS_DIRECTORY/YOUR_PROJECT_NAME`
-* Create the Heroku app: `heroku create PROJECT_NAME`
+5.  start the server<br>
+``` npm start```<br>
 
-* If your backend connects to a database, you need to configure the database URL:
-    * For a MongoDB database: `heroku config:set DATABASE_URL=mongodb://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
-    * For a PostgreSQL database: `heroku config:set DATABASE_URL=postgresql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
+The api can now be accessed at:  
+```http://localhost:8080/```
 
-* If you are creating a full-stack app, you need to configure the client origin: `heroku config:set CLIENT_ORIGIN=https://www.YOUR_DEPLOYED_CLIENT.com`
+See below for specific endpoints.
 
-### Deploying to Heroku
 
-* Push your code to Heroku: `git push heroku master`
+Data Fields
+------
+
+|  **field**          |         **description**           |
+|:--------------------|:----------------------------------|
+|  id                 |  uniquely assigned id             |
+|  firstName          |  users first name                 |
+|  lastName           |  users last name                  |
+|  head               |  first object                     |
+|  userQs             |  array of questions               |
+|  uqId               |  user question id                 |
+|  uqNext             |  next value in question object    |
+|  uRepF              |  memory factor                    |
+|  qhistAtt fields    |   hostory of question attempt     |                                                                 
+| qhistCorr           |  history of correct answer        |
+| question            |  question of plice code           |
+| answer              |  answer of police code question   |
+
+
+Endpoints
+------
+Base url:  https://buzz-kill-backend-bbp.herokuapp.com/
+
+**GET api/users**<br>
+Returns array of objects with detailed information on each user.  Sample user object:
+```    
+    {
+	id: "5a1dcfaf67fea94e7a96c09a",
+	firstName: "jasper",
+	lastName: "javius",
+	username: "jjtheman",
+	head: 0,
+	userQs: [
+			{
+			uqId: 0,
+			uqNext: 1,
+			uQuestion: "10-41",
+			uAnswer: "beginning tour",
+			uRepF: 1,
+			_id: "5a1dcfaf67fea94e7a96c0a4",
+			qhistCorr: 0,
+			qhistAtt: 0
+			},.......
+		]
+```
+On success, return code: 200
+On failure, return code: 500
+
+**GET api/questions**<br>
+Returns array of objects of question.  Sample question object:
+```    
+    {
+question: "10-41"
+},
+```
+On success, return code: 200
+On failure, return code: 500
+
+
+**POST api/questions**<br>
+Include in header ...  Content-Type:  application/json
+Include in body ... question, answer
+
+
+```
+{
+	"question": "10-20",
+	"answer": "location"
+}
+```
+On success, return code: 201
+On failure, return code: 422 (input error), or 500 (server error)
+Will return detailed information (see GET call).
+
+**POST api/users**<br>
+Include in header ...  Content-Type:  application/json
+Include in body ... username, password, fistName and lastName
+
+
+```
+{
+	"firstName": "jasper",
+	"lastName": "javius",
+	"username": "jjtheman",
+	"password": "password"
+}
+```
+On success, return code: 201
+On failure, return code: 422 (input error), or 500 (server error)
+Will return detailed information (see GET call).
+
+
+**PUT api/users/userquestion/userId**<br>
+Include in header ...  Content-Type:  application/json
+Include in body ... user's id (must match id in url)
+
+```
+{
+	"_id": "5a1dcfaf67fea94e7a96c09a"
+	
+}
+```
+On success, return code: 201
+On failure, return code: 500 (server error)
+
+Will return detailed information (see GET call).
+
+
+**DELETE api/users/userId**<br>
+Id in url must be valid id of currently active user.
+
+On success, return code: 204
+On failure, return code: 422 (input error) or 500 (server error)
+
+Technology Used
+------
+* javascript
+* node.js
+* express
+* cors
+* mongodb
+* mongoose
+* mocha, chai
+

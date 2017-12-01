@@ -31,7 +31,6 @@ router.post('/', jsonParser, (req, res) => {
       location: missingF
     });
   }
-  
   let {question, answer} = req.body;
   return   Question.create({question, answer})
     .then(patron => res.status(201).json(patron.apiRepr())

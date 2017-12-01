@@ -15,7 +15,7 @@ How it Works
       <p>Police code's main screen displays police 10-code.  It is provided with police 10-code.</p>
     </td>
     <td width = "40%">
-      <img src="/img/buzz-kill-main.png" max-height="240px" width="auto">
+      <img src="/images/question.png" max-height="240px" width="auto">
     </td>
   </tr>
   <tr>

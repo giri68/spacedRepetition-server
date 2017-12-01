@@ -12,7 +12,7 @@ How it Works
 <table layout="fixed">
   <tr>
     <td width="55%">
-      <p>Police code's main screen displays police 10-code.  It is provided with police 10-code.</p>
+      <p>Police code's main screen displays police 10-code.  It is provided with question.</p>
     </td>
     <td width = "40%">
       <img src="/images/question.png" max-height="240px" width="auto">
